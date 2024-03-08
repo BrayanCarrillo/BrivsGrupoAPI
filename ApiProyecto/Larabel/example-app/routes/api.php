@@ -10,7 +10,9 @@ use App\Models\Mesa;
 use App\Models\MenuItem;
 use App\Models\Menu;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\MenuCategoryController;
+use App\Http\Controllers\MenuPlatoController;
+use App\Http\Controllers\EmployeeController;
 
 #/////////////////////General para todos los usuarios//////////////////////////
 # Inicio Usuarios
@@ -25,28 +27,61 @@ Route::get('/ordenes-listas', [OrdenController::class, 'listarOrdenesListas']);
 
 #Lista del nombre de todos los empleados con su estado Nombre - estado
 
+Route::get('/employees', function () {
+    // Obtener todos los empleados con solo el nombre y su estado
+    $employees = Staff::all(['username', 'status']);
+
+    // Devolver la respuesta como JSON con la lista de empleados
+    return response()->json(['employees' => $employees]);
+});
+
+
 
 #-----------------Admnistración del menu-----------------------------
 
 #-----------------Categoria------------------------------------------
-#Agregar Categoria
-#Eliminar Categoria
-#Editar nombre Categoria
+
+// Crear categoría de menú
+Route::post('/menu-categories', [MenuCategoryController::class, 'store']);
+
+// Actualizar categoría de menú
+Route::put('/menu-categories/{id}', [MenuCategoryController::class, 'update']);
+
+// Eliminar categoría de menú
+Route::delete('/menu-categories/{id}', [MenuCategoryController::class, 'destroy']);
+
 #----------------------Menu PLatos-----------------------------------
-#editar plato
-#eliminar plato
-#agregar plato
+Route::prefix('menu-platos')->group(function () {
+    // Ruta para editar un plato
+    Route::put('/{itemID}', [MenuPlatoController::class, 'editarPlato'])->name('menu-platos.editar');
+
+    // Ruta para eliminar un plato
+    Route::delete('/{itemID}', [MenuPlatoController::class, 'eliminarPlato'])->name('menu-platos.eliminar');
+
+    // Ruta para agregar un nuevo plato
+    Route::post('/', [MenuPlatoController::class, 'agregarPlato'])->name('menu-platos.agregar');
+});
+
     
 #---------------------Administracion de ventas-----------------------
 #Consulta - Estadisticas de ganancia de ventas
 #Lista de ordenes vendidas
 
 #---------------------Adminitracion de empleados--------------------
-#Lista de todos los empleados ID usuario Estado rol
-#Eliminar empleados con una ID especifica
-#Actualizar empleados
-#Eliminar empleados
-#Agregar empleados
+Route::prefix('empleados')->group(function () {
+    // Ruta para listar todos los empleados
+    Route::get('/', [EmployeeController::class, 'listarEmpleados']);
+
+    // Ruta para eliminar un empleado por su ID
+    Route::delete('/{id}', [EmployeeController::class, 'eliminarEmpleado']);
+
+    // Ruta para actualizar un empleado por su ID
+    Route::put('/{id}', [EmployeeController::class, 'actualizarEmpleado']);
+
+    // Ruta para agregar un nuevo empleado
+    Route::post('/', [EmployeeController::class, 'agregarEmpleado']);
+});
+
 
 #-------------------Mesas Admin Gestion-----------------------------
 // Rutas CRUD para el modelo Mesa
