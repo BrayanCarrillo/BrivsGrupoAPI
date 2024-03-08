@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_menuitem', function (Blueprint $table) {
-            $table->integer('itemID', true);
-            $table->integer('menuID')->index('menuid');
-            $table->text('menuItemName');
-            $table->decimal('price', 15);
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->string('email')->primary();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_menuitem');
+        Schema::dropIfExists('password_resets');
     }
 };

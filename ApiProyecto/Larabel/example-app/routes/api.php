@@ -1,11 +1,10 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MesaController;
 use App\Http\Controllers\OrdenController;
-use App\Models\Staff; 
-use App\Models\Admin; 
+use App\Models\Staff;
+use App\Models\Admin;
 use App\Models\Mesa;
 use App\Models\MenuItem;
 use App\Models\Menu;
@@ -13,6 +12,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuCategoryController;
 use App\Http\Controllers\MenuPlatoController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\GananciasController;
+use App\Http\Controllers\ListaVentasController;
 
 #/////////////////////General para todos los usuarios//////////////////////////
 # Inicio Usuarios
@@ -62,10 +63,19 @@ Route::prefix('menu-platos')->group(function () {
     Route::post('/', [MenuPlatoController::class, 'agregarPlato'])->name('menu-platos.agregar');
 });
 
-    
+
 #---------------------Administracion de ventas-----------------------
 #Consulta - Estadisticas de ganancia de ventas
+
+
+Route::get('/ganancias/hoy', [GananciasController::class, 'gananciasHoy']);
+Route::get('/ganancias/semana', [GananciasController::class, 'gananciasSemana']);
+Route::get('/ganancias/mes', [GananciasController::class, 'gananciasMes']);
+Route::get('/ganancias/todo-el-tiempo', [GananciasController::class, 'gananciasTodoElTiempo']);
+
 #Lista de ordenes vendidas
+
+Route::get('/ordenes', [ListaVentasController::class, 'listarOrdenes']);
 
 #---------------------Adminitracion de empleados--------------------
 Route::prefix('empleados')->group(function () {
@@ -110,7 +120,12 @@ Route::delete('/mesas/{id}', [MesaController::class, 'destroy']);
 #----------------------Tomar ordenes------------------------------
 #Lista de todas las categorias
 
-#Lista de todo el menu 
+Route::get('/categories', function () {
+    $categories = Menu::all();
+    return response()->json(['categories' => $categories]);
+});
+
+#Lista de todo el menu (Caegorias)
 Route::get('/menu', function () {
     $all_menus = Menu::all();
     $serialized_menus = $all_menus->toArray();
