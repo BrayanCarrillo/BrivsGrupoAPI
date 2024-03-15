@@ -14,6 +14,10 @@ use App\Http\Controllers\MenuPlatoController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\GananciasController;
 use App\Http\Controllers\ListaVentasController;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Http\Controllers\InsertarOrdenController;
+use App\Http\Controllers\ChefController;
 
 #/////////////////////General para todos los usuarios//////////////////////////
 # Inicio Usuarios
@@ -23,6 +27,40 @@ Route::get('/chef_dashboard', [AuthController::class, 'chefDashboard'])->name('c
 Route::get('/mesero_dashboard', [AuthController::class, 'meseroDashboard'])->name('mesero_dashboard');
 #Lista de Ordenes que ya estan listas
 Route::get('/ordenes-listas', [OrdenController::class, 'listarOrdenesListas']);
+
+#Actualizar contraseña usuarios
+
+use App\Http\Controllers\CambiarContrasenaController;
+
+// Ruta para cambiar la contraseña de usuarios
+Route::put('/cambiar-contrasena', [CambiarContrasenaController::class, 'cambiarContrasena']);
+
+// Controlador para cambiar la contraseña de usuarios
+Route::put('/cambiar-contrasena/{userID}', function ($userID, Request $request) {
+    // Validar los datos de la solicitud
+    $request->validate([
+        'password' => 'required|string|min:6',
+        'role' => 'required|in:admin,staff',
+    ]);
+
+    // Buscar al usuario por su ID
+    $user = null;
+    if ($request->role === 'admin') {
+        $user = Admin::find($userID);
+    } elseif ($request->role === 'staff') {
+        $user = Staff::find($userID);
+    }
+
+    if (!$user) {
+        return response()->json(['error' => 'Usuario no encontrado'], 404);
+    }
+
+    // Cambiar la contraseña del usuario
+    $user->password = bcrypt($request->password);
+    $user->save();
+
+    return response()->json(['message' => 'Contraseña cambiada correctamente'], 200);
+});
 
 #////////////////////////ADMINISTRADOR/////////////////////////////////////
 
@@ -159,6 +197,9 @@ Route::get('/menu/{menu_id?}', function ($menu_id = null) {
 #Crear pedido insertado osea insertar pedidos nuevos: Nombre-precio-mesa-Valor total (CORREGIR EXISTENTE)
 
 
+Route::post('/insertar-orden', [InsertarOrdenController::class, 'insertarOrden']);
+
+
 #-------------------Ajustes-----------------------------------------
 #Actualizar Contraseña de usuario logueado
 
@@ -168,12 +209,46 @@ Route::get('/menu/{menu_id?}', function ($menu_id = null) {
 #OPCIONAL Actualizar estado de empleado Online a offline
 
 #--------------------Cocina planel de control-------------------
-#numero de orden categoria nombre del plato cantidad estado
-#Actualizar estado de orden a preparando y listo
-#Eliminar orden de la lista
-# Eliminar un pedido por su ID
-# Obtener todos los detalles de un pedido por su ID
 
+   // Obtener todos los detalles de un pedido por su ID
+Route::get('/order-details/{orderId}', function ($orderId) {
+    $orderDetails = OrderDetail::where('orderID', $orderId)->get();
+    return response()->json($orderDetails);
+});
+
+
+    // Actualizar estado de orden a preparando y listo
+// Actualizar estado de orden a preparando, waiting y listo
+Route::put('/order-status/{orderId}', function (Request $request, $orderId) {
+    $request->validate([
+        'status' => 'required|in:preparando,Esperando,listo',
+    ]);
+
+    $order = Order::findOrFail($orderId);
+    $order->status = $request->status;
+    $order->save();
+
+    return response()->json(['message' => 'Estado de orden actualizado con éxito']);
+});
+
+
+    // Obtener todas las órdenes
+    Route::get('/orders', function () {
+        $orders = Order::all();
+        return response()->json($orders);
+    });
+
+  // Eliminar una orden y su detalle por su ID
+Route::delete('/orders/{orderId}', function ($orderId) {
+    // Buscar y eliminar la orden
+    $order = Order::findOrFail($orderId);
+    $order->delete();
+
+    // Buscar y eliminar todos los detalles de la orden
+    OrderDetail::where('orderID', $orderId)->delete();
+
+    return response()->json(['message' => 'Orden y detalles de orden eliminados correctamente']);
+});
 
 #-------------------Ajustes-----------------------------------------
 #Actualizar Contraseña de usuario logueado
