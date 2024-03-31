@@ -7,7 +7,26 @@ use App\Models\MenuItem;
 
 class MenuPlatoController extends Controller
 {
-    // Editar plato
+    // Obtener todos los platos con el nombre del menú
+    public function obtenerPlatos()
+    {
+        // Cargar la relación del menú usando 'with'
+        $platos = MenuItem::with('menu')->get();
+        
+        // Mapear la respuesta para incluir el nombre del menú en lugar del menuID
+        $platosConMenu = $platos->map(function ($plato) {
+            return [
+                'itemID' => $plato->itemID,
+                'menu' => $plato->menu ? $plato->menu->menuName : null,
+                'menuItemName' => $plato->menuItemName,
+                'price' => $plato->price,
+            ];
+        });
+
+        return response()->json($platosConMenu, 200);
+    }
+
+    // Editar plato con posibilidad de cambiar menuID
     public function editarPlato(Request $request, $itemID)
     {
         $plato = MenuItem::find($itemID);
@@ -15,9 +34,10 @@ class MenuPlatoController extends Controller
             return response()->json(['message' => 'Plato no encontrado'], 404);
         }
 
-        // Actualiza los datos del plato
-        $plato->menuItemName = $request->input('menuItemName');
-        $plato->price = $request->input('price');
+        // Actualiza los datos del plato, incluido menuID si se proporciona en la solicitud
+        $plato->menuItemName = $request->input('menuItemName', $plato->menuItemName);
+        $plato->price = $request->input('price', $plato->price);
+        $plato->menuID = $request->input('menuID', $plato->menuID);
         $plato->save();
 
         return response()->json($plato, 200);

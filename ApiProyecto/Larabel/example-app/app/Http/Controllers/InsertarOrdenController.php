@@ -15,27 +15,32 @@ class InsertarOrdenController extends Controller
             'total' => 'required|numeric',
             'order_date' => 'required|date',
             'mesaID' => 'required|integer',
-            'orderID' => 'required|integer|unique:tbl_order' // Asegurar que orderID sea único
+            'orderID' => 'required|integer|unique:tbl_order', // Asegurar que orderID sea único en la tabla tbl_order
         ]);
 
-        // Obtener los datos del request
-        $status = $request->input('status');
-        $total = $request->input('total');
-        $order_date = $request->input('order_date');
-        $mesaID = $request->input('mesaID');
-        $orderID = $request->input('orderID'); // Nuevo campo para orderID
+        try {
+            // Obtener los datos del request
+            $status = $request->input('status');
+            $total = $request->input('total');
+            $order_date = $request->input('order_date');
+            $mesaID = $request->input('mesaID');
+            $orderID = $request->input('orderID');
 
-        // Crear un nuevo objeto Order con los datos proporcionados
-        $order = new Order();
-        $order->orderID = $orderID; // Asignar el valor de orderID
-        $order->status = $status;
-        $order->total = $total;
-        $order->order_date = $order_date;
-        $order->mesaID = $mesaID;
+            // Crear un nuevo objeto Order con los datos proporcionados
+            $order = new Order();
+            $order->orderID = $orderID;
+            $order->status = $status;
+            $order->total = $total;
+            $order->order_date = $order_date;
+            $order->mesaID = $mesaID;
 
-        // Guardar el nuevo objeto en la base de datos
-        $order->save();
+            // Guardar el nuevo objeto en la base de datos
+            $order->save();
 
-        return response()->json(['message' => 'Orden insertada correctamente'], 201);
+            return response()->json(['message' => 'Orden insertada correctamente'], 201);
+        } catch (\Exception $e) {
+            // Capturar cualquier excepción y devolver un mensaje de error
+            return response()->json(['error' => 'Error al insertar la orden: ' . $e->getMessage()], 500);
+        }
     }
 }

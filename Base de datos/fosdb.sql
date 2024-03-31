@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-02-2024 a las 13:17:29
+-- Tiempo de generación: 24-02-2024 a las 18:24:27
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -222,7 +222,7 @@ CREATE TABLE `tbl_role` (
 --
 
 INSERT INTO `tbl_role` (`role`) VALUES
-('chef'),
+('Chef'),
 ('Mesero');
 
 -- --------------------------------------------------------
@@ -244,14 +244,13 @@ CREATE TABLE `tbl_staff` (
 --
 
 INSERT INTO `tbl_staff` (`staffID`, `username`, `password`, `status`, `role`) VALUES
-(1, 'Juan', '1234abcd..', 'Online', 'chef'),
+(1, 'Juan', '1234abcd..', 'Online', 'Chef'),
 (4, 'Pedro', '1234abcd..', 'Online', 'Mesero'),
-(5, 'Emily', '1234abcd..', 'Online', 'chef'),
-(6, 'Robert', '1234abcd..', 'Online', 'chef'),
+(5, 'Emily', '1234abcd..', 'Online', 'Chef'),
+(6, 'Robert', '1234abcd..', 'Online', 'Chef'),
 (7, 'Sofia', 'abc123', 'Offline', 'Mesero'),
-(9, 'Marin', '1234abcd..', 'Online', 'chef'),
-(10, 'Ana', '1234abcd..', 'Offline', 'chef'),
-(17, 'nombre_usuario', 'contraseña', 'Online', 'chef');
+(9, 'Marin', '1234abcd..', 'Online', 'Chef'),
+(10, 'Ana', '1234abcd..', 'Offline', 'Chef');
 
 --
 -- Índices para tablas volcadas
@@ -335,7 +334,7 @@ ALTER TABLE `tbl_orderdetail`
 -- AUTO_INCREMENT de la tabla `tbl_staff`
 --
 ALTER TABLE `tbl_staff`
-  MODIFY `staffID` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `staffID` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas

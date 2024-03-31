@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,16 +10,17 @@ class ListaVentasController extends Controller
 {
     public function listarOrdenes()
     {
-        $ordenes = OrderDetail::with('order', 'menuItem')->get();
+        $ordenes = OrderDetail::with('order', 'menuItem.menu')->get();
 
         $ordenesVendidas = [];
         foreach ($ordenes as $orden) {
-            $menuName = $orden->menuItem ? $orden->menuItem->menu->menuName : 'N/A';
+            $menuName = $orden->menuItem && $orden->menuItem->menu ? $orden->menuItem->menu->menuName : 'N/A';
+            $menuItemName = $orden->menuItem ? $orden->menuItem->menuItemName : 'N/A';
 
             $ordenVenta = [
                 'Numero de Orden' => $orden->order->orderID,
                 'Menu' => $menuName,
-                'Nombre del Plato' => $orden->menuItem ? $orden->menuItem->menuItemName : 'N/A',
+                'Nombre del Plato' => $menuItemName,
                 'Cantidad' => $orden->quantity,
                 'Estado' => $orden->order->status,
                 'Total (COP)' => $orden->order->total,

@@ -52,5 +52,5 @@ class ChefController extends Controller
         $orderDetail->delete();
 
         return response()->json(['message' => 'Detalle de orden eliminado correctamente']);
-    }
+    } 
 }

@@ -18,22 +18,31 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Http\Controllers\InsertarOrdenController;
 use App\Http\Controllers\ChefController;
+use App\Http\Controllers\ContrasenaController;
+// controlador categoria menu 
+
 
 #/////////////////////General para todos los usuarios//////////////////////////
 # Inicio Usuarios
 Route::post('/login', [AuthController::class, 'login']);
+
 Route::get('/admin_dashboard', [AuthController::class, 'adminDashboard'])->name('admin_dashboard');
 Route::get('/chef_dashboard', [AuthController::class, 'chefDashboard'])->name('chef_dashboard');
 Route::get('/mesero_dashboard', [AuthController::class, 'meseroDashboard'])->name('mesero_dashboard');
+
+
+
 #Lista de Ordenes que ya estan listas
 Route::get('/ordenes-listas', [OrdenController::class, 'listarOrdenesListas']);
 
 #Actualizar contraseña usuarios
 
-use App\Http\Controllers\CambiarContrasenaController;
+
 
 // Ruta para cambiar la contraseña de usuarios
-Route::put('/cambiar-contrasena', [CambiarContrasenaController::class, 'cambiarContrasena']);
+Route::get('/empleados', [ContrasenaController::class, 'index'])->name('empleados.index');
+
+Route::put('/empleados/{id}/cambiar-contrasena', [ContrasenaController::class, 'cambiarContrasena'])->name('empleados.cambiar_contrasena');
 
 // Controlador para cambiar la contraseña de usuarios
 Route::put('/cambiar-contrasena/{userID}', function ($userID, Request $request) {
@@ -75,10 +84,18 @@ Route::get('/employees', function () {
 });
 
 
+// Rutas para platos del menú
+Route::post('/platos', [MenuPlatoController::class, 'agregarPlato']);
+Route::put('/platos/{itemID}', [MenuPlatoController::class, 'editarPlato']);
+Route::delete('/platos/{itemID}', [MenuPlatoController::class, 'eliminarPlato']);
 
 #-----------------Admnistración del menu-----------------------------
 
 #-----------------Categoria------------------------------------------
+
+Route::get('/menu-categories', [MenuCategoryController::class, 'index']);
+// obtener categoria de menu 
+Route::get('menu/{menuID}/items', 'MenuCategoryController@showMenuItems');
 
 // Crear categoría de menú
 Route::post('/menu-categories', [MenuCategoryController::class, 'store']);
@@ -90,17 +107,50 @@ Route::put('/menu-categories/{id}', [MenuCategoryController::class, 'update']);
 Route::delete('/menu-categories/{id}', [MenuCategoryController::class, 'destroy']);
 
 #----------------------Menu PLatos-----------------------------------
-Route::prefix('menu-platos')->group(function () {
-    // Ruta para editar un plato
-    Route::put('/{itemID}', [MenuPlatoController::class, 'editarPlato'])->name('menu-platos.editar');
 
-    // Ruta para eliminar un plato
-    Route::delete('/{itemID}', [MenuPlatoController::class, 'eliminarPlato'])->name('menu-platos.eliminar');
+// ver todos los platos 
+Route::get('/menu-items', [MenuPlatoController::class, 'obtenerPlatos']);
 
-    // Ruta para agregar un nuevo plato
-    Route::post('/', [MenuPlatoController::class, 'agregarPlato'])->name('menu-platos.agregar');
+//mostratar cada plato dependiendo de su categoria
+
+Route::get('/menu/{menu_id?}', function ($menu_id = null) {
+
+    if ($menu_id !== null) {
+        $menu = Menu::find($menu_id);
+
+        if ($menu) {
+            $menu_items = MenuItem::where('menuID', $menu_id)->get();
+
+            $serialized_menu = $menu->toArray();
+            $serialized_menu_items = $menu_items->toArray();
+
+            return response()->json(["menu" => $serialized_menu, "menu_items" => $serialized_menu_items]);
+        } else {
+            return response()->json(["error" => "Categoría no encontrada"], 404);
+        }
+    } else {
+        $all_menus = Menu::all();
+
+        $serialized_menus = $all_menus->toArray();
+
+        return response()->json(["menus" => $serialized_menus]);
+    }
 });
 
+// Obtener todos los platos
+Route::get('/menu-platos', [MenuPlatoController::class, 'obtenerPlatos']);
+
+// Obtener un plato por ID
+Route::get('/menu-platos/{itemID}', [MenuPlatoController::class, 'obtenerPlato']);
+
+// Editar plato
+Route::put('/menu-platos/{itemID}', [MenuPlatoController::class, 'editarPlato']);
+
+// Eliminar plato
+Route::delete('/menu-platos/{itemID}', [MenuPlatoController::class, 'eliminarPlato']);
+
+// Agregar plato
+Route::post('/menu-platos', [MenuPlatoController::class, 'agregarPlato']);
 
 #---------------------Administracion de ventas-----------------------
 #Consulta - Estadisticas de ganancia de ventas
@@ -116,34 +166,19 @@ Route::get('/ganancias/todo-el-tiempo', [GananciasController::class, 'gananciasT
 Route::get('/ordenes', [ListaVentasController::class, 'listarOrdenes']);
 
 #---------------------Adminitracion de empleados--------------------
-Route::prefix('empleados')->group(function () {
-    // Ruta para listar todos los empleados
-    Route::get('/', [EmployeeController::class, 'listarEmpleados']);
-
-    // Ruta para eliminar un empleado por su ID
-    Route::delete('/{id}', [EmployeeController::class, 'eliminarEmpleado']);
-
-    // Ruta para actualizar un empleado por su ID
-    Route::put('/{id}', [EmployeeController::class, 'actualizarEmpleado']);
-
-    // Ruta para agregar un nuevo empleado
-    Route::post('/', [EmployeeController::class, 'agregarEmpleado']);
-});
-
+Route::get('/empleados', [EmployeeController::class, 'listarEmpleados']);
+Route::post('/empleados', [EmployeeController::class, 'agregarEmpleado']);
+Route::delete('/empleados/{id}', [EmployeeController::class, 'eliminarEmpleado']);
+Route::put('/empleados/{id}', [EmployeeController::class, 'actualizarEmpleado']);
+Route::put('/empleados/{id}/rol', [EmployeeController::class, 'actualizarRolEmpleado']);
 
 #-------------------Mesas Admin Gestion-----------------------------
-// Rutas CRUD para el modelo Mesa
-#Lista de Mesas todas
-Route::get('/mesas', [MesaController::class, 'index']);
-#Lista de Mesa id especifica
-Route::get('/mesas/{id}', [MesaController::class, 'show']);
-#Agregar Mesa
-Route::post('/mesas', [MesaController::class, 'store']);
-#Actualizar mesa
-Route::put('/mesas/{id}', [MesaController::class, 'update']);
-#Eliminar mesa especifica con una ID
-Route::delete('/mesas/{id}', [MesaController::class, 'destroy']);
-
+// Rutas para operaciones CRUD de mesas
+Route::get('/mesas', [MesaController::class, 'index']); // Obtener todas las mesas
+Route::get('/mesas/{id}', [MesaController::class, 'show']); // Mostrar una mesa específica
+Route::post('/mesas', [MesaController::class, 'store']); // Crear una nueva mesa
+Route::put('/mesas/{id}', [MesaController::class, 'update']); // Actualizar una mesa existente
+Route::delete('/mesas/{id}', [MesaController::class, 'destroy']); // Eliminar una mesa
 #-------------------Ajustes-----------------------------------------
 #Actualizar Contraseña de usuario logueado
 

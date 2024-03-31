@@ -27,7 +27,12 @@ class MesaController extends Controller
     // Método para crear una nueva mesa
     public function store(Request $request)
     {
+        $request->validate([
+            'mesaID' => 'required|integer', // Cambiado a mesaID y se espera un entero
+        ]);
+
         $mesa = new Mesa();
+        $mesa->mesaID = $request->input('mesaID'); // Ajuste para usar mesaID
         $mesa->save();
 
         return response()->json($mesa, 201);
@@ -36,13 +41,16 @@ class MesaController extends Controller
     // Método para actualizar una mesa existente
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'mesaID' => 'required|integer', // Cambiado a mesaID y se espera un entero
+        ]);
+
         $mesa = Mesa::find($id);
         if (!$mesa) {
             return response()->json(['error' => 'Mesa not found'], 404);
         }
 
-        // Actualizar los campos necesarios de la mesa
-
+        $mesa->mesaID = $request->input('mesaID'); // Ajuste para usar mesaID
         $mesa->save();
 
         return response()->json($mesa);
