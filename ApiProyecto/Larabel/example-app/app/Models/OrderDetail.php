@@ -29,4 +29,5 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(MenuItem::class, 'itemID');
     }
+    public $incrementing = true;
 }

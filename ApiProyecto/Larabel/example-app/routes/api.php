@@ -17,8 +17,8 @@ use App\Http\Controllers\ListaVentasController;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Http\Controllers\InsertarOrdenController;
-use App\Http\Controllers\ChefController;
 use App\Http\Controllers\ContrasenaController;
+use App\Http\Controllers\ChefController;
 // controlador categoria menu 
 
 
@@ -33,8 +33,7 @@ Route::get('/mesero_dashboard', [AuthController::class, 'meseroDashboard'])->nam
 
 
 #Lista de Ordenes que ya estan listas
-Route::get('/ordenes-listas', [OrdenController::class, 'listarOrdenesListas']);
-
+Route::get('/ordenes/listas', [OrdenController::class, 'listarOrdenesListas']);
 #Actualizar contraseña usuarios
 
 
@@ -93,18 +92,12 @@ Route::delete('/platos/{itemID}', [MenuPlatoController::class, 'eliminarPlato'])
 
 #-----------------Categoria------------------------------------------
 
-Route::get('/menu-categories', [MenuCategoryController::class, 'index']);
-// obtener categoria de menu 
-Route::get('menu/{menuID}/items', 'MenuCategoryController@showMenuItems');
-
-// Crear categoría de menú
-Route::post('/menu-categories', [MenuCategoryController::class, 'store']);
-
-// Actualizar categoría de menú
-Route::put('/menu-categories/{id}', [MenuCategoryController::class, 'update']);
-
-// Eliminar categoría de menú
-Route::delete('/menu-categories/{id}', [MenuCategoryController::class, 'destroy']);
+// Rutas relacionadas con la administración de categorías de menú
+Route::get('/menu-categories', [MenuCategoryController::class, 'index']); // Obtener todas las categorías de menú
+Route::get('/menu-categories/{id}', [MenuCategoryController::class, 'show']); // Mostrar una categoría de menú específica
+Route::post('/menu-categories', [MenuCategoryController::class, 'store']); // Crear una nueva categoría de menú
+Route::put('/menu-categories/{id}', [MenuCategoryController::class, 'update']); // Actualizar una categoría de menú existente
+Route::delete('/menu-categories/{id}', [MenuCategoryController::class, 'destroy']); // Eliminar una categoría de menú
 
 #----------------------Menu PLatos-----------------------------------
 
@@ -193,45 +186,51 @@ Route::delete('/mesas/{id}', [MesaController::class, 'destroy']); // Eliminar un
 #----------------------Tomar ordenes------------------------------
 #Lista de todas las categorias
 
-Route::get('/categories', function () {
-    $categories = Menu::all();
-    return response()->json(['categories' => $categories]);
-});
+//Route::get('/categories', function () {
+ //   $categories = Menu::all();
+//    return response()->json(['categories' => $categories]);
+//});
 
 #Lista de todo el menu (Caegorias)
-Route::get('/menu', function () {
-    $all_menus = Menu::all();
-    $serialized_menus = $all_menus->toArray();
-    return response()->json(["menus" => $serialized_menus]);
-});
+//Route::get('/menu', function () {
+//    $all_menus = Menu::all();
+//    $serialized_menus = $all_menus->toArray();
+//    return response()->json(["menus" => $serialized_menus]);
+//});
 
 #Lista de menu dependiendo de la categoria seleccionada
-Route::get('/menu/{menu_id?}', function ($menu_id = null) {
+//*Route::get('/menu/{menu_id?}', function ($menu_id = null) {
 
-    if ($menu_id !== null) {
-        $menu = Menu::find($menu_id);
+//if ($menu_id !== null) {
+  //      $menu = Menu::find($menu_id);
+//
+    //    if ($menu) {
+  //          $menu_items = MenuItem::where('menuID', $menu_id)->get();
+//
+    //        $serialized_menu = $menu->toArray();
+  //          $serialized_menu_items = $menu_items->toArray();
+//
+  //          return response()->json(["menu" => $serialized_menu, "menu_items" => $serialized_menu_items]);
+ //       } else {
+//            return response()->json(["error" => "Categoría no encontrada"], 404);
+//        }
+//    } else {
+ //       $all_menus = Menu::all();
 
-        if ($menu) {
-            $menu_items = MenuItem::where('menuID', $menu_id)->get();
+//        $serialized_menus = $all_menus->toArray();
+//
+//        return response()->json(["menus" => $serialized_menus]);
+//    }
+//});
 
-            $serialized_menu = $menu->toArray();
-            $serialized_menu_items = $menu_items->toArray();
+//obtener todas las mesas 
+// Ruta para obtener todas las mesas
+Route::get('obtener-mesas', [InsertarOrdenController::class, 'obtenerMesas']);
 
-            return response()->json(["menu" => $serialized_menu, "menu_items" => $serialized_menu_items]);
-        } else {
-            return response()->json(["error" => "Categoría no encontrada"], 404);
-        }
-    } else {
-        $all_menus = Menu::all();
-
-        $serialized_menus = $all_menus->toArray();
-
-        return response()->json(["menus" => $serialized_menus]);
-    }
-});
 #Crear pedido insertado osea insertar pedidos nuevos: Nombre-precio-mesa-Valor total (CORREGIR EXISTENTE)
+Route::get('/categorias-platos', [InsertarOrdenController::class, 'obtenerCategoriasPlatos']);
 
-
+// Ruta para insertar una orden
 Route::post('/insertar-orden', [InsertarOrdenController::class, 'insertarOrden']);
 
 
@@ -242,6 +241,17 @@ Route::post('/insertar-orden', [InsertarOrdenController::class, 'insertarOrden']
 #GENERAL Lista de ordenes listas
 #OPCIONAL Ver nombre de empleado que inicio sesión-Rol
 #OPCIONAL Actualizar estado de empleado Online a offline
+
+
+
+//corregido 
+
+
+Route::get('/chef/all-orders', [ChefController::class, 'getAllOrdersWithDetails']);
+Route::put('/chef/update-order-status/{orderId}', [ChefController::class, 'updateOrderStatus']);
+Route::delete('/chef/delete-order/{orderId}', [ChefController::class, 'deleteOrder']);
+
+
 
 #--------------------Cocina planel de control-------------------
 

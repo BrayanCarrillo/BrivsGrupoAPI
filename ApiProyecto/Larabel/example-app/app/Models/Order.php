@@ -18,4 +18,5 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class, 'orderID', 'orderID');
     }
+    public $incrementing = true;
 }

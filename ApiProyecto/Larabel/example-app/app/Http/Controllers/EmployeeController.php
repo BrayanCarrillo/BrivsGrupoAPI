@@ -37,7 +37,8 @@ class EmployeeController extends Controller
 
         // Verificar y actualizar el rol si se proporciona en la solicitud
         if ($request->has('role')) {
-            $roleValue = strtolower($request->input('role')); // Convertir a minúsculas
+            // Convertir el rol a la forma correcta
+            $roleValue = ucfirst(strtolower($request->input('role')));
             $empleado->role = $roleValue;
             $empleado->save();
 
@@ -54,8 +55,8 @@ class EmployeeController extends Controller
         $empleado->username = $request->input('username');
         $empleado->status = $request->input('status');
         
-        // Convertir el valor del frontend a minúsculas para el backend
-        $roleValue = strtolower($request->input('role')); // Convertir a minúsculas
+        // Convertir el valor del frontend a la forma correcta para el backend
+        $roleValue = ucfirst(strtolower($request->input('role')));
         $empleado->role = $roleValue;
 
         // Asignar un valor temporal al campo password

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-02-2024 a las 18:24:27
+-- Tiempo de generación: 01-04-2024 a las 06:44:44
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -80,7 +80,7 @@ CREATE TABLE `tbl_menuitem` (
 --
 
 INSERT INTO `tbl_menuitem` (`itemID`, `menuID`, `menuItemName`, `price`) VALUES
-(17, 8, 'bacalao', 15000.00),
+(17, 8, 'Bacalao', 15000.00),
 (20, 8, 'Plato Actualizado', 15000.00),
 (21, 9, 'Salmón al Vapor', 16000.00),
 (22, 9, 'Cazuela de Mariscos', 17000.00),
@@ -89,8 +89,7 @@ INSERT INTO `tbl_menuitem` (`itemID`, `menuID`, `menuItemName`, `price`) VALUES
 (25, 10, 'Agua de Coco', 3000.00),
 (26, 10, 'Limonada de Maracuyá', 3500.00),
 (27, 11, 'Sopa de Pescado con Verduras', 12000.00),
-(28, 11, 'Crema de Mariscos', 14000.00),
-(42, 1, 'Nuevo Plato', 15000.00);
+(28, 11, 'Crema de Mariscos', 14000.00);
 
 -- --------------------------------------------------------
 
@@ -120,8 +119,7 @@ INSERT INTO `tbl_mesa` (`mesaID`) VALUES
 (13),
 (14),
 (15),
-(16),
-(17);
+(16);
 
 -- --------------------------------------------------------
 
@@ -142,36 +140,40 @@ CREATE TABLE `tbl_order` (
 --
 
 INSERT INTO `tbl_order` (`orderID`, `status`, `total`, `order_date`, `mesaID`) VALUES
-(2, 'finish', 10000.00, '2023-01-17', 0),
-(3, 'finish', 11000.00, '2023-01-18', 0),
-(4, 'cancelled', 6000.00, '2023-01-18', 0),
-(5, 'cancelled', 10000.00, '2023-01-25', 0),
-(6, 'finish', 15500.00, '2023-01-25', 0),
-(7, 'cancelled', 12000.00, '2023-12-17', 1),
-(8, 'cancelled', 13000.00, '2023-12-17', 1),
-(9, 'cancelled', 13000.00, '2023-12-17', 1),
-(10, 'cancelled', 48000.00, '2023-12-17', 1),
-(11, 'cancelled', 13000.00, '2023-12-17', 1),
-(12, 'cancelled', 16000.00, '2023-12-17', 1),
-(13, 'cancelled', 60000.00, '2023-12-17', 1),
-(14, 'cancelled', 36000.00, '2023-12-17', 1),
-(15, 'cancelled', 45000.00, '2023-12-17', 1),
-(16, 'cancelled', 12000.00, '2023-12-17', 8),
-(17, 'cancelled', 12000.00, '2023-12-17', 9),
-(18, 'cancelled', 12000.00, '2023-12-17', 5),
-(19, 'cancelled', 12000.00, '2023-12-17', 4),
-(20, 'cancelled', 12000.00, '2023-12-17', 7),
-(21, 'cancelled', 12000.00, '2023-12-17', 4),
-(22, 'cancelled', 24000.00, '2023-12-17', 6),
-(23, 'cancelled', 12000.00, '2023-12-17', 3),
-(24, 'cancelled', 12000.00, '2023-12-17', 4),
-(25, 'cancelled', 13000.00, '2023-12-17', 7),
-(26, 'cancelled', 24000.00, '2023-12-17', 5),
-(27, 'cancelled', 24000.00, '2023-12-17', 12),
-(28, 'ready', 12000.00, '2023-12-17', 7),
-(29, 'ready', 12000.00, '2023-12-17', 12),
-(30, 'ready', 12000.00, '2023-12-18', 14),
-(31, 'waiting', 3000.00, '2024-01-30', 7);
+(5, 'cancelado', 10000.00, '2023-01-25', 0),
+(6, 'listo', 15500.00, '2023-01-25', 0),
+(7, 'preparando', 12000.00, '2023-12-17', 1),
+(8, 'preparando', 13000.00, '2023-12-17', 1),
+(9, 'preparando', 13000.00, '2023-12-17', 1),
+(10, 'preparando', 48000.00, '2023-12-17', 1),
+(11, 'preparando', 13000.00, '2023-12-17', 1),
+(12, 'preparando', 16000.00, '2023-12-17', 1),
+(13, 'listo', 60000.00, '2023-12-17', 1),
+(14, 'esperando', 36000.00, '2023-12-17', 1),
+(15, 'esperando', 45000.00, '2023-12-17', 1),
+(16, 'cancelado', 12000.00, '2023-12-17', 8),
+(17, 'cancelado', 12000.00, '2023-12-17', 9),
+(18, 'cancelado', 12000.00, '2023-12-17', 5),
+(19, 'cancelado', 12000.00, '2023-12-17', 4),
+(20, 'cancelado', 12000.00, '2023-12-17', 7),
+(21, 'cancelado', 12000.00, '2023-12-17', 4),
+(22, 'cancelado', 24000.00, '2023-12-17', 6),
+(23, 'cancelado', 12000.00, '2023-12-17', 3),
+(24, 'cancelado', 12000.00, '2023-12-17', 4),
+(25, 'cancelado', 13000.00, '2023-12-17', 7),
+(26, 'listo', 24000.00, '2023-12-17', 5),
+(27, 'esperando', 24000.00, '2023-12-17', 12),
+(28, 'listo', 12000.00, '2023-12-17', 7),
+(29, 'listo', 12000.00, '2023-12-17', 12),
+(30, 'listo', 12000.00, '2023-12-18', 14),
+(1001, 'esperando', 0.00, '2024-03-31', 3),
+(1002, 'esperando', 0.00, '2024-03-31', 3),
+(1003, 'esperando', 0.00, '2024-04-01', 3),
+(1004, 'esperando', 0.00, '2024-04-01', 3),
+(1008, 'esperando', 30000.00, '2024-04-01', 4),
+(1009, 'esperando', 12000.00, '2024-04-01', 12),
+(1010, 'listo', 3000.00, '2024-04-01', 13),
+(1011, 'esperando', 21000.00, '2024-04-01', 3);
 
 -- --------------------------------------------------------
 
@@ -184,7 +186,7 @@ CREATE TABLE `tbl_orderdetail` (
   `orderDetailID` int(11) NOT NULL,
   `itemID` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `mesaID` int(11) NOT NULL
+  `mesaID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -192,20 +194,16 @@ CREATE TABLE `tbl_orderdetail` (
 --
 
 INSERT INTO `tbl_orderdetail` (`orderID`, `orderDetailID`, `itemID`, `quantity`, `mesaID`) VALUES
-(2, 3, 14, 1, 3),
-(2, 4, 15, 1, 4),
-(2, 5, 16, 1, 5),
-(3, 6, 25, 1, 6),
-(3, 7, 38, 1, 7),
-(3, 8, 32, 1, 8),
-(4, 9, 17, 1, 9),
-(4, 10, 30, 1, 10),
 (26, 34, 17, 2, 5),
 (27, 35, 17, 2, 12),
 (28, 36, 17, 1, 7),
 (29, 37, 17, 1, 12),
 (30, 38, 17, 1, 14),
-(31, 39, 25, 1, 7);
+(1008, 43, 17, 2, NULL),
+(1009, 44, 27, 1, NULL),
+(1010, 45, 25, 1, NULL),
+(1011, 46, 17, 1, NULL),
+(1011, 47, 25, 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -244,8 +242,8 @@ CREATE TABLE `tbl_staff` (
 --
 
 INSERT INTO `tbl_staff` (`staffID`, `username`, `password`, `status`, `role`) VALUES
-(1, 'Juan', '1234abcd..', 'Online', 'Chef'),
-(4, 'Pedro', '1234abcd..', 'Online', 'Mesero'),
+(1, 'Juan', '1234abcd..', 'Online', 'mesero'),
+(4, 'Pedro', '1234abcd..', 'Online', 'Chef'),
 (5, 'Emily', '1234abcd..', 'Online', 'Chef'),
 (6, 'Robert', '1234abcd..', 'Online', 'Chef'),
 (7, 'Sofia', 'abc123', 'Offline', 'Mesero'),
@@ -325,10 +323,16 @@ ALTER TABLE `tbl_mesa`
   MODIFY `mesaID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- AUTO_INCREMENT de la tabla `tbl_order`
+--
+ALTER TABLE `tbl_order`
+  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1012;
+
+--
 -- AUTO_INCREMENT de la tabla `tbl_orderdetail`
 --
 ALTER TABLE `tbl_orderdetail`
-  MODIFY `orderDetailID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `orderDetailID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_staff`
@@ -344,7 +348,8 @@ ALTER TABLE `tbl_staff`
 -- Filtros para la tabla `tbl_orderdetail`
 --
 ALTER TABLE `tbl_orderdetail`
-  ADD CONSTRAINT `fk_mesaID` FOREIGN KEY (`mesaID`) REFERENCES `tbl_mesa` (`mesaID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_mesaID` FOREIGN KEY (`mesaID`) REFERENCES `tbl_mesa` (`mesaID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_orderID` FOREIGN KEY (`orderID`) REFERENCES `tbl_order` (`orderID`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
