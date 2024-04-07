@@ -45,7 +45,7 @@
 <h2 align="center">Tecnologías Utilizadas</h2>
 
 <p align="center">
-  <b>Back-end:</b> Pycharm, Python, JavaScript<br>
-  <b>Front-end:</b> HTML, CSS<br>
+  <b>Back-end:</b> Pycharm, Python, JavaScript, Larabel<br>
+  <b>Front-end:</b> HTML, CSS, React<br>
   <b>Control de versiones:</b> Git, GitHub
 </p>
