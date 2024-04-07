@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://th.bing.com/th/id/OIG4.mUfRhjbbBOAXtGSlilPX?pid=ImgGn" alt="Orden-Brivs Logo" width="200" style="border-radius: 50%;">
-  <h1>Orden-Brivs 🍔🍕🥗</h1>
+  <h1>Orden-Brivs Api 🍔🍕🥗</h1>
 </div>
 
 <p align="center">¡Bienvenido al proyecto Orden-Brivs! Este es un sistema de gestión de órdenes diseñado para un restaurante, desarrollado por un equipo talentoso de Back-end y Front-end.</p>
