@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-04-2024 a las 06:44:44
+-- Tiempo de generación: 15-05-2024 a las 00:32:02
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -49,18 +49,18 @@ INSERT INTO `tbl_admin` (`ID`, `username`, `password`) VALUES
 
 CREATE TABLE `tbl_menu` (
   `menuID` int(11) NOT NULL,
-  `menuName` varchar(25) NOT NULL
+  `menuName` varchar(25) NOT NULL,
+  `activate` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Volcado de datos para la tabla `tbl_menu`
 --
 
-INSERT INTO `tbl_menu` (`menuID`, `menuName`) VALUES
-(8, 'a la Parrilla'),
-(9, 'Cocidos o al Vapor'),
-(10, 'Bebidas'),
-(11, 'Sopas');
+INSERT INTO `tbl_menu` (`menuID`, `menuName`, `activate`) VALUES
+(9, 'Cocidos o al Vapor', 1),
+(10, 'Bebidas', 1),
+(11, 'Sopas', 1);
 
 -- --------------------------------------------------------
 
@@ -72,24 +72,23 @@ CREATE TABLE `tbl_menuitem` (
   `itemID` int(11) NOT NULL,
   `menuID` int(11) NOT NULL,
   `menuItemName` text NOT NULL,
-  `price` decimal(15,2) NOT NULL
+  `price` decimal(15,2) NOT NULL,
+  `activate` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Volcado de datos para la tabla `tbl_menuitem`
 --
 
-INSERT INTO `tbl_menuitem` (`itemID`, `menuID`, `menuItemName`, `price`) VALUES
-(17, 8, 'Bacalao', 15000.00),
-(20, 8, 'Plato Actualizado', 15000.00),
-(21, 9, 'Salmón al Vapor', 16000.00),
-(22, 9, 'Cazuela de Mariscos', 17000.00),
-(23, 9, 'Arroz con Camarones', 14000.00),
-(24, 9, 'Pescado al Vapor con Hierbas', 15000.00),
-(25, 10, 'Agua de Coco', 3000.00),
-(26, 10, 'Limonada de Maracuyá', 3500.00),
-(27, 11, 'Sopa de Pescado con Verduras', 12000.00),
-(28, 11, 'Crema de Mariscos', 14000.00);
+INSERT INTO `tbl_menuitem` (`itemID`, `menuID`, `menuItemName`, `price`, `activate`) VALUES
+(20, 8, 'Plato Actualizado', 15000.00, 1),
+(21, 9, 'Salmón al Vapor', 16000.00, 0),
+(22, 9, 'Cazuela de Mariscos', 17000.00, 0),
+(23, 9, 'Arroz con Camarones', 14000.00, 0),
+(24, 9, 'Pescado al Vapor con Hierbas', 15000.00, 0),
+(25, 10, 'Agua de Coco', 3000.00, 0),
+(26, 10, 'Limonada de Maracuyá', 3500.00, 0),
+(27, 11, 'Sopa de Pescado con Verduras', 12000.00, 0);
 
 -- --------------------------------------------------------
 
@@ -98,28 +97,29 @@ INSERT INTO `tbl_menuitem` (`itemID`, `menuID`, `menuItemName`, `price`) VALUES
 --
 
 CREATE TABLE `tbl_mesa` (
-  `mesaID` int(11) NOT NULL
+  `mesaID` int(11) NOT NULL,
+  `activate` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Volcado de datos para la tabla `tbl_mesa`
 --
 
-INSERT INTO `tbl_mesa` (`mesaID`) VALUES
-(3),
-(4),
-(5),
-(6),
-(7),
-(8),
-(9),
-(10),
-(11),
-(12),
-(13),
-(14),
-(15),
-(16);
+INSERT INTO `tbl_mesa` (`mesaID`, `activate`) VALUES
+(3, 0),
+(4, 0),
+(5, 0),
+(6, 0),
+(7, 0),
+(8, 0),
+(9, 0),
+(10, 0),
+(11, 0),
+(12, 0),
+(13, 0),
+(14, 0),
+(15, 0),
+(16, 0);
 
 -- --------------------------------------------------------
 
@@ -161,9 +161,6 @@ INSERT INTO `tbl_order` (`orderID`, `status`, `total`, `order_date`, `mesaID`) V
 (23, 'cancelado', 12000.00, '2023-12-17', 3),
 (24, 'cancelado', 12000.00, '2023-12-17', 4),
 (25, 'cancelado', 13000.00, '2023-12-17', 7),
-(26, 'listo', 24000.00, '2023-12-17', 5),
-(27, 'esperando', 24000.00, '2023-12-17', 12),
-(28, 'listo', 12000.00, '2023-12-17', 7),
 (29, 'listo', 12000.00, '2023-12-17', 12),
 (30, 'listo', 12000.00, '2023-12-18', 14),
 (1001, 'esperando', 0.00, '2024-03-31', 3),
@@ -173,7 +170,9 @@ INSERT INTO `tbl_order` (`orderID`, `status`, `total`, `order_date`, `mesaID`) V
 (1008, 'esperando', 30000.00, '2024-04-01', 4),
 (1009, 'esperando', 12000.00, '2024-04-01', 12),
 (1010, 'listo', 3000.00, '2024-04-01', 13),
-(1011, 'esperando', 21000.00, '2024-04-01', 3);
+(1012, 'listo', 15000.00, '2024-05-03', 3),
+(1013, 'esperando', 30000.00, '2024-05-03', 11),
+(1014, 'esperando', 12000.00, '2024-05-03', 11);
 
 -- --------------------------------------------------------
 
@@ -194,16 +193,14 @@ CREATE TABLE `tbl_orderdetail` (
 --
 
 INSERT INTO `tbl_orderdetail` (`orderID`, `orderDetailID`, `itemID`, `quantity`, `mesaID`) VALUES
-(26, 34, 17, 2, 5),
-(27, 35, 17, 2, 12),
-(28, 36, 17, 1, 7),
 (29, 37, 17, 1, 12),
 (30, 38, 17, 1, 14),
 (1008, 43, 17, 2, NULL),
 (1009, 44, 27, 1, NULL),
 (1010, 45, 25, 1, NULL),
-(1011, 46, 17, 1, NULL),
-(1011, 47, 25, 2, NULL);
+(1012, 48, 17, 1, NULL),
+(1013, 49, 17, 2, NULL),
+(1014, 50, 27, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -233,7 +230,7 @@ CREATE TABLE `tbl_staff` (
   `staffID` int(2) NOT NULL,
   `username` varchar(25) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `status` text NOT NULL,
+  `status` tinyint(1) NOT NULL,
   `role` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -242,13 +239,15 @@ CREATE TABLE `tbl_staff` (
 --
 
 INSERT INTO `tbl_staff` (`staffID`, `username`, `password`, `status`, `role`) VALUES
-(1, 'Juan', '1234abcd..', 'Online', 'mesero'),
-(4, 'Pedro', '1234abcd..', 'Online', 'Chef'),
-(5, 'Emily', '1234abcd..', 'Online', 'Chef'),
-(6, 'Robert', '1234abcd..', 'Online', 'Chef'),
-(7, 'Sofia', 'abc123', 'Offline', 'Mesero'),
-(9, 'Marin', '1234abcd..', 'Online', 'Chef'),
-(10, 'Ana', '1234abcd..', 'Offline', 'Chef');
+(1, 'Juan', '$2y$10$skZTaK.l3byhf5ksLAjVMOitNwe5tqQMPnx406VFuHRY4NUoBBLdu', 1, 'Mesero'),
+(4, 'Pedro', '1234abcd..', 1, 'Chef'),
+(5, 'Emily', '1234abcd..', 1, 'Chef'),
+(6, 'Robert', '1234abcd..', 1, 'Chef'),
+(7, 'Sofia', 'abc123', 1, 'Mesero'),
+(9, 'Marin', '1234abcd..', 1, 'Chef'),
+(11, 'Ana Maria', '$2y$10$w0GdZ/7ge4A8vl4R2ptoI.vXncnk9LiE71VCJueaUWt.uTcig7PfG', 1, 'Mesero'),
+(12, 'Juanita', '$2y$10$y.EoPqVNFUZeKDSGNUPB9O.zQIMWBr7tAbzK1nXZXaJM1Dg7Xs7tm', 1, 'Mesero'),
+(13, 'Pepito', '$2y$10$y0rzuNDlOG81ZBbgPDd9yu4XNOSg/4OD/gSSiOxGBUPJ5UWQ1NzHK', 1, 'Mesero');
 
 --
 -- Índices para tablas volcadas
@@ -308,13 +307,13 @@ ALTER TABLE `tbl_staff`
 -- AUTO_INCREMENT de la tabla `tbl_menu`
 --
 ALTER TABLE `tbl_menu`
-  MODIFY `menuID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `menuID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_menuitem`
 --
 ALTER TABLE `tbl_menuitem`
-  MODIFY `itemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `itemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_mesa`
@@ -326,19 +325,19 @@ ALTER TABLE `tbl_mesa`
 -- AUTO_INCREMENT de la tabla `tbl_order`
 --
 ALTER TABLE `tbl_order`
-  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1012;
+  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1015;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_orderdetail`
 --
 ALTER TABLE `tbl_orderdetail`
-  MODIFY `orderDetailID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `orderDetailID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_staff`
 --
 ALTER TABLE `tbl_staff`
-  MODIFY `staffID` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `staffID` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Restricciones para tablas volcadas

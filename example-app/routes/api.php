@@ -19,10 +19,16 @@ use App\Models\OrderDetail;
 use App\Http\Controllers\InsertarOrdenController;
 use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\ChefController;
+use App\Http\Controllers\ConsultasController;
 // controlador categoria menu 
 
 
 #/////////////////////General para todos los usuarios//////////////////////////
+
+#consultas 
+
+Route::get('/detalles-mesa', [ConsultasController::class, 'mostrarDetallesDeMesa']);
+
 # Inicio Usuarios
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -88,9 +94,15 @@ Route::post('/platos', [MenuPlatoController::class, 'agregarPlato']);
 Route::put('/platos/{itemID}', [MenuPlatoController::class, 'editarPlato']);
 Route::delete('/platos/{itemID}', [MenuPlatoController::class, 'eliminarPlato']);
 
+//actualizar el estado de un empleado a activo o inactivo
+Route::put('/empleados/{id}/estado', [EmployeeController::class, 'actualizarEstadoEmpleado']);
+
 #-----------------Admnistración del menu-----------------------------
 
 #-----------------Categoria------------------------------------------
+
+//obtener plato con su categoria 
+Route::get('/menu-platos/categoria/{menuID}', [MenuPlatoController::class, 'obtenerPlatosPorCategoria']);
 
 // Rutas relacionadas con la administración de categorías de menú
 Route::get('/menu-categories', [MenuCategoryController::class, 'index']); // Obtener todas las categorías de menú
@@ -144,6 +156,16 @@ Route::delete('/menu-platos/{itemID}', [MenuPlatoController::class, 'eliminarPla
 
 // Agregar plato
 Route::post('/menu-platos', [MenuPlatoController::class, 'agregarPlato']);
+
+// Actualizar estado de plato a activo o inactivo 
+Route::put('/platos/{itemID}/estado', [MenuPlatoController::class, 'cambiarEstadoPlato'])->name('platos.estado');
+
+// Actualizar estado de categoria 
+
+Route::put('/menu-categorias/{id}/cambiar-estado', [MenuCategoryController::class, 'cambiarEstadoCategoria']);
+
+// Actualizar estado mesa
+Route::put('/mesas/{id}/cambiar-estado', [MesaController::class, 'cambiarEstadoMesa']);
 
 #---------------------Administracion de ventas-----------------------
 #Consulta - Estadisticas de ganancia de ventas
@@ -224,6 +246,7 @@ Route::delete('/mesas/{id}', [MesaController::class, 'destroy']); // Eliminar un
 //});
 
 //obtener todas las mesas 
+
 // Ruta para obtener todas las mesas
 Route::get('obtener-mesas', [InsertarOrdenController::class, 'obtenerMesas']);
 

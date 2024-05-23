@@ -66,4 +66,25 @@ class EmployeeController extends Controller
 
         return response()->json($empleado, 201);
     }
+
+    // Actualizar estado del empleado sin cambiar la ruta de eliminar empleado
+    public function actualizarEstadoEmpleado(Request $request, $id)
+    {
+        $empleado = Staff::find($id);
+        if (!$empleado) {
+            return response()->json(['message' => 'Empleado no encontrado'], 404);
+        }
+
+        // Verificar y actualizar el estado si se proporciona en la solicitud
+        if ($request->has('status')) {
+            // Convertir el estado a la forma correcta
+            $statusValue = (bool)$request->input('status');
+            $empleado->status = $statusValue;
+            $empleado->save();
+
+            return response()->json(['message' => 'Estado del empleado actualizado correctamente'], 200);
+        } else {
+            return response()->json(['message' => 'Estado no proporcionado en la solicitud'], 400);
+        }
+    }
 }

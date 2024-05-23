@@ -67,4 +67,22 @@ class MesaController extends Controller
 
         return response()->json(['message' => 'Mesa deleted']);
     }
+    
+    // Método para cambiar el estado de una mesa (activar/desactivar)
+    public function cambiarEstadoMesa(Request $request, $id)
+    {
+        $request->validate([
+            'activate' => 'required|boolean', // Se espera un valor booleano para activate
+        ]);
+
+        $mesa = Mesa::find($id);
+        if (!$mesa) {
+            return response()->json(['error' => 'Mesa not found'], 404);
+        }
+
+        $mesa->activate = $request->input('activate'); // Actualiza el estado de la mesa
+        $mesa->save();
+
+        return response()->json($mesa);
+    }
 }

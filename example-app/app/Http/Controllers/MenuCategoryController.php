@@ -24,19 +24,22 @@ class MenuCategoryController extends Controller
         return response()->json($categoria);
     }
 
-    // Método para crear una nueva categoría de menú
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nombre' => 'required|string|unique:tbl_menu,menuName',
-        ]);
+   // Método para crear una nueva categoría de menú
+public function store(Request $request)
+{
+    $request->validate([
+        'nombre' => 'required|string|unique:tbl_menu,menuName',
+        'activate' => 'required|boolean', // Agregar validación para activate
+    ]);
 
-        $categoria = new Menu();
-        $categoria->menuName = $request->nombre;
-        $categoria->save();
+    $categoria = new Menu();
+    $categoria->menuName = $request->nombre;
+    $categoria->activate = $request->activate; // Asignar valor para activate
+    $categoria->save();
 
-        return response()->json($categoria, 201);
-    }
+    return response()->json($categoria, 201);
+}
+
 
     // Método para actualizar una categoría de menú existente
     public function update(Request $request, $id)
@@ -62,5 +65,23 @@ class MenuCategoryController extends Controller
         $categoria->delete();
 
         return response()->json(['message' => 'Categoría de menú eliminada']);
+    }
+    public function cambiarEstadoCategoria(Request $request, $id)
+    {
+        $request->validate([
+            'activate' => 'required|boolean', // Se espera un valor booleano para activate
+        ]);
+    
+        $categoria = Menu::find($id);
+        
+        if (!$categoria) {
+            return response()->json(['error' => 'Categoría de menú no encontrada'], 404);
+        }
+    
+        // Cambiar el estado de la categoría de menú
+        $categoria->activate = $request->activate;
+        $categoria->save();
+    
+        return response()->json($categoria, 200);
     }
 }

@@ -20,11 +20,6 @@ class OrderDetail extends Model
         return $this->belongsTo(MenuItem::class, 'itemID');
     }
 
-    public function mesa()
-    {
-        return $this->belongsTo(Mesa::class, 'mesaID');
-    }
-
     public function menuItem()
     {
         return $this->belongsTo(MenuItem::class, 'itemID');
