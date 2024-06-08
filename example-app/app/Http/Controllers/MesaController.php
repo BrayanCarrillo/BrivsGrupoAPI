@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -29,10 +28,12 @@ class MesaController extends Controller
     {
         $request->validate([
             'mesaID' => 'required|integer', // Cambiado a mesaID y se espera un entero
+            'activate' => 'required|boolean', // Se espera un valor booleano para activate
         ]);
 
         $mesa = new Mesa();
         $mesa->mesaID = $request->input('mesaID'); // Ajuste para usar mesaID
+        $mesa->activate = $request->input('activate'); // Ajuste para usar activate
         $mesa->save();
 
         return response()->json($mesa, 201);
@@ -43,6 +44,7 @@ class MesaController extends Controller
     {
         $request->validate([
             'mesaID' => 'required|integer', // Cambiado a mesaID y se espera un entero
+            'activate' => 'required|boolean', // Se espera un valor booleano para activate
         ]);
 
         $mesa = Mesa::find($id);
@@ -51,6 +53,7 @@ class MesaController extends Controller
         }
 
         $mesa->mesaID = $request->input('mesaID'); // Ajuste para usar mesaID
+        $mesa->activate = $request->input('activate'); // Ajuste para usar activate
         $mesa->save();
 
         return response()->json($mesa);

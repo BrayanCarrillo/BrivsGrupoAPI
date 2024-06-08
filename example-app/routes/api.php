@@ -20,10 +20,19 @@ use App\Http\Controllers\InsertarOrdenController;
 use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\ChefController;
 use App\Http\Controllers\ConsultasController;
+
 // controlador categoria menu 
+
+use App\Http\Controllers\BackupController;
+
+Route::get('/backup', [BackupController::class, 'createBackup']);
+//restaurar datos
+Route::post('/restore', [BackupController::class, 'restoreBackup']);
+//backup
 
 
 #/////////////////////General para todos los usuarios//////////////////////////
+Route::put('api/menu-platos/{itemID}/estado', [MenuPlatoController::class, 'cambiarEstadoPlato']);
 
 #consultas 
 
