@@ -21,6 +21,11 @@ use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\ChefController;
 use App\Http\Controllers\ConsultasController;
 
+//cambiar nombre empleado 
+Route::put('/empleados/{id}/actualizar-nombre', [EmployeeController::class, 'actualizarNombreEmpleado']);
+//login capcha
+
+Route::post('/login', [AuthController::class, 'login']);
 // controlador categoria menu 
 
 use App\Http\Controllers\BackupController;

@@ -87,4 +87,23 @@ class EmployeeController extends Controller
             return response()->json(['message' => 'Estado no proporcionado en la solicitud'], 400);
         }
     }
+
+    // Actualizar nombre del empleado
+    public function actualizarNombreEmpleado(Request $request, $id)
+    {
+        $empleado = Staff::find($id);
+        if (!$empleado) {
+            return response()->json(['message' => 'Empleado no encontrado'], 404);
+        }
+
+        // Verificar y actualizar el nombre si se proporciona en la solicitud
+        if ($request->has('username')) {
+            $empleado->username = $request->input('username');
+            $empleado->save();
+
+            return response()->json(['message' => 'Nombre del empleado actualizado correctamente'], 200);
+        } else {
+            return response()->json(['message' => 'Nombre no proporcionado en la solicitud'], 400);
+        }
+    }
 }
