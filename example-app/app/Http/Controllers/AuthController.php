@@ -1,73 +1,5 @@
 <?php
 
-/**
- * @OA\Info(
- *     title="Título que mostraremos en swagger",
- *     version="1.0",
- *     description="Descripcion"
- * )
- *
- * @OA\Server(url="http://127.0.0.1:8000/api")
- */
-
-/**
- * Título que define lo que hará esta URI
- * @OA\Post (
- *     path="/login",
- *     tags={"Autenticación"},
- *     summary="Iniciar sesión",
- *     description="Inicia sesión con credenciales de usuario",
- *     @OA\Response(
- *         response=200,
- *         description="Iniciar sesión exitoso",
- *         @OA\JsonContent(
- *             @OA\Property(
- *                 property="role",
- *                 type="string",
- *                 example="admin"
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=401,
- *         description="Credenciales de inicio de sesión incorrectas",
- *         @OA\JsonContent(
- *             @OA\Property(
- *                 property="error",
- *                 type="string",
- *                 example="Credenciales de inicio de sesión incorrectas"
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=401,
- *         description="Rol de usuario no válido",
- *         @OA\JsonContent(
- *             @OA\Property(
- *                 property="error",
- *                 type="string",
- *                 example="Rol de usuario no válido"
- *             )
- *         )
- *     ),
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             @OA\Property(
- *                 property="username",
- *                 type="string",
- *                 example="usuario"
- *             ),
- *             @OA\Property(
- *                 property="password",
- *                 type="string",
- *                 example="contraseña"
- *             )
- *         )
- *     )
- * )
- */
-
 namespace App\Http\Controllers;
 
 use App\Models\Staff;
@@ -95,6 +27,11 @@ class AuthController extends Controller
                 return response()->json(["error" => "Credenciales de inicio de sesión incorrectas"], 401);
             }
         } else {
+            // Check if the user is deactivated
+            if ($user->status == 0) {
+                return response()->json(["error" => "Usuario desactivado"], 403);
+            }
+
             // Si el usuario no tiene un rol entre 'mesero' y 'chef', considerarlo como 'admin'
             $role = strtolower($user->role);
             if (!in_array($role, ['chef', 'mesero'])) {
