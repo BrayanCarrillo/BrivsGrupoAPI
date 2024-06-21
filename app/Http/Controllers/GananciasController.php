@@ -8,9 +8,7 @@ use App\Models\Order; // Asegúrate de importar el modelo de Order
 class GananciasController extends Controller
 {
     public function gananciasHoy()
-
     {
-        
         $ganancias = Order::whereDate('order_date', today())->sum('total');
         return response()->json(['ganancias' => $ganancias]);
     }
